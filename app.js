@@ -9,7 +9,7 @@ function calc() {
   const process = getVal("process");
   const mold = getVal("mold");
   const die = getVal("die");
-  const washer = getVal("washer");
+  const components = getVal("components");
   const extra1 = getVal("extra1");
   const extra2 = getVal("extra2");
   const freight = getVal("freight");
@@ -37,7 +37,7 @@ function calc() {
     process +
     mold +
     die +
-    washer +
+    components +
     extra1 +
     extra2 +
     freight;
@@ -70,3 +70,4 @@ function calc() {
 function getVal(id) {
   return +document.getElementById(id).value || 0;
 }
+
