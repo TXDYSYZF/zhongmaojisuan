@@ -1,3 +1,19 @@
+:root {
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --text: #333;
+  --primary: #1677ff;
+  --result: #e6f4ff;
+}
+
+body.dark {
+  --bg: #121212;
+  --card: #1e1e1e;
+  --text: #eaeaea;
+  --primary: #3b82f6;
+  --result: #1f2937;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -5,84 +21,84 @@
 body {
   margin: 0;
   font-family: Arial, "Microsoft YaHei", sans-serif;
-  background: #f5f7fa;
-  color: #333;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .app {
   max-width: 900px;
-  margin: 30px auto;
-  padding: 10px;
+  margin: auto;
+  padding: 15px;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.theme-btn {
+  background: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .card {
-  background: #ffffff;
+  background: var(--card);
   padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 18px;
+  border-radius: 12px;
 }
 
 .card h2 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 18px;
-  border-left: 4px solid #1677ff;
+  border-left: 4px solid var(--primary);
   padding-left: 10px;
 }
 
 .row {
   display: grid;
-  grid-template-columns: 160px 1fr 160px 1fr;
-  gap: 10px 15px;
+  grid-template-columns: 150px 1fr 150px 1fr;
+  gap: 10px;
   margin-bottom: 12px;
 }
 
 label {
   align-self: center;
-  font-weight: 600;
 }
 
 input {
-  padding: 8px 10px;
-  border: 1px solid #d9d9d9;
+  padding: 10px;
   border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
-button {
+.calc-btn {
   width: 100%;
-  padding: 14px;
+  padding: 15px;
   font-size: 16px;
-  font-weight: bold;
-  background: #1677ff;
+  background: var(--primary);
   color: #fff;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #0958d9;
+  border-radius: 10px;
 }
 
 .result {
-  margin-top: 20px;
-  background: #e6f4ff;
-  padding: 18px;
-  border-radius: 8px;
+  background: var(--result);
+  padding: 16px;
+  border-radius: 10px;
 }
 
-.result strong {
-  color: #cf1322;
-}
-
+/* 手机适配 */
 @media (max-width: 768px) {
   .row {
     grid-template-columns: 1fr;
+  }
+
+  .top {
+    flex-direction: column;
+    gap: 10px;
   }
 }
