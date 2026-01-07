@@ -2,14 +2,17 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>成本分析定价系统</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <div class="app">
-    <h1>成本分析定价</h1>
+    <header class="top">
+      <h1>成本分析定价</h1>
+      <button class="theme-btn" onclick="toggleTheme()">🌙 深色模式</button>
+    </header>
 
     <!-- 商品信息 -->
     <section class="card">
@@ -28,7 +31,7 @@
           <input id="weight" type="number" step="0.0001" />
         </div>
         <div class="form-item">
-          <label>材料单价（元 / 吨）</label>
+          <label>材料单价（元/吨）</label>
           <input id="materialPrice" type="number" />
         </div>
       </div>
@@ -38,42 +41,15 @@
     <section class="card">
       <h2>成本构成</h2>
       <div class="form-grid">
-        <div class="form-item">
-          <label>加工费（元 / 件）</label>
-          <input id="process" type="number" />
-        </div>
-        <div class="form-item">
-          <label>模具费用（元 / 件）</label>
-          <input id="mold" type="number" />
-        </div>
-        <div class="form-item">
-          <label>牙板费（元 / 件）</label>
-          <input id="die" type="number" />
-        </div>
-        <div class="form-item">
-          <label>组件（元 / 件）</label>
-          <input id="components" type="number" />
-        </div>
-        <div class="form-item">
-          <label>热处理（元 / kg）</label>
-          <input id="heat" type="number" />
-        </div>
-        <div class="form-item">
-          <label>镀层（元 / kg）</label>
-          <input id="plating" type="number" />
-        </div>
-        <div class="form-item">
-          <label>附加1（元 / 件）</label>
-          <input id="extra1" type="number" />
-        </div>
-        <div class="form-item">
-          <label>附加2（元 / 件）</label>
-          <input id="extra2" type="number" />
-        </div>
-        <div class="form-item">
-          <label>运费（元 / 件）</label>
-          <input id="freight" type="number" />
-        </div>
+        <div class="form-item"><label>加工费</label><input id="process" type="number" /></div>
+        <div class="form-item"><label>模具费</label><input id="mold" type="number" /></div>
+        <div class="form-item"><label>牙板费</label><input id="die" type="number" /></div>
+        <div class="form-item"><label>组件</label><input id="components" type="number" /></div>
+        <div class="form-item"><label>热处理（元/kg）</label><input id="heat" type="number" /></div>
+        <div class="form-item"><label>镀层（元/kg）</label><input id="plating" type="number" /></div>
+        <div class="form-item"><label>附加1</label><input id="extra1" type="number" /></div>
+        <div class="form-item"><label>附加2</label><input id="extra2" type="number" /></div>
+        <div class="form-item"><label>运费</label><input id="freight" type="number" /></div>
       </div>
     </section>
 
@@ -81,18 +57,9 @@
     <section class="card">
       <h2>系数项</h2>
       <div class="form-grid">
-        <div class="form-item">
-          <label>损耗率（%）</label>
-          <input id="loss" type="number" value="0" />
-        </div>
-        <div class="form-item">
-          <label>利润率（%）</label>
-          <input id="profit" type="number" value="20" />
-        </div>
-        <div class="form-item">
-          <label>税率（%）</label>
-          <input id="tax" type="number" value="13" />
-        </div>
+        <div class="form-item"><label>损耗率 %</label><input id="loss" type="number" value="0" /></div>
+        <div class="form-item"><label>利润率 %</label><input id="profit" type="number" value="20" /></div>
+        <div class="form-item"><label>税率 %</label><input id="tax" type="number" value="13" /></div>
       </div>
     </section>
 
