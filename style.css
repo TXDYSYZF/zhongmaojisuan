@@ -65,10 +65,6 @@ body {
   margin-bottom: 12px;
 }
 
-label {
-  align-self: center;
-}
-
 input {
   padding: 10px;
   border-radius: 6px;
@@ -96,7 +92,6 @@ input {
   .row {
     grid-template-columns: 1fr;
   }
-
   .top {
     flex-direction: column;
     gap: 10px;
