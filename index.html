@@ -20,7 +20,6 @@
       <div class="row">
         <label>料号</label>
         <input id="code" type="text" />
-
         <label>规格</label>
         <input id="spec" type="text" />
       </div>
@@ -28,13 +27,12 @@
       <div class="row">
         <label>单重（g）</label>
         <input id="weight" type="number" step="0.0001" />
-
         <label>材料单价（元 / 吨）</label>
         <input id="materialPrice" type="number" />
       </div>
     </section>
 
-    <!-- 成本构成 -->
+    <!-- 成本构成（全部保留） -->
     <section class="card">
       <h2>成本构成</h2>
 
@@ -46,6 +44,11 @@
       <div class="row">
         <label>牙板费（元 / 件）</label><input id="die" type="number" />
         <label>组件（元 / 件）</label><input id="components" type="number" />
+      </div>
+
+      <div class="row">
+        <label>热处理（元 / kg）</label><input id="heat" type="number" />
+        <label>镀层（元 / kg）</label><input id="plating" type="number" />
       </div>
 
       <div class="row">
