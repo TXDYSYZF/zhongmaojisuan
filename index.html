@@ -2,15 +2,19 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>成本分析定价系统</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <div class="app">
-    <h1>成本分析定价</h1>
+    <header class="top">
+      <h1>成本分析定价</h1>
+      <button class="theme-btn" onclick="toggleTheme()">🌙 深色模式</button>
+    </header>
 
-    <!-- ================= 商品信息 ================= -->
+    <!-- 商品信息 -->
     <section class="card">
       <h2>商品信息</h2>
       <div class="row">
@@ -30,7 +34,7 @@
       </div>
     </section>
 
-    <!-- ================= 成本构成 ================= -->
+    <!-- 成本构成 -->
     <section class="card">
       <h2>成本构成</h2>
 
@@ -45,11 +49,6 @@
       </div>
 
       <div class="row">
-        <label>热处理（元 / kg）</label><input id="heat" type="number" />
-        <label>镀层（元 / kg）</label><input id="plating" type="number" />
-      </div>
-
-      <div class="row">
         <label>附加1（元 / 件）</label><input id="extra1" type="number" />
         <label>附加2（元 / 件）</label><input id="extra2" type="number" />
       </div>
@@ -59,9 +58,9 @@
       </div>
     </section>
 
-    <!-- ================= 系数项 ================= -->
+    <!-- 系数 -->
     <section class="card">
-      <h2>系数项（相乘）</h2>
+      <h2>系数项</h2>
       <div class="row">
         <label>损耗率（%）</label><input id="loss" type="number" value="0" />
         <label>利润率（%）</label><input id="profit" type="number" value="20" />
@@ -71,9 +70,8 @@
       </div>
     </section>
 
-    <button onclick="calc()">计算单价</button>
+    <button class="calc-btn" onclick="calc()">计算单价</button>
 
-    <!-- ================= 结果 ================= -->
     <section class="result" id="result"></section>
   </div>
 
