@@ -89,3 +89,126 @@ function downloadExcel() {
 function toggleTheme() {
   document.body.classList.toggle("dark");
 }
+
+function downloadQuoteDoc() {
+  if (!g_priceWithTax) {
+    alert("请先计算单价");
+    return;
+  }
+
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日`;
+
+  const html = `
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    font-family: SimSun;
+    font-size: 10.5pt;
+    line-height: 1.6;
+  }
+  .title {
+    text-align: center;
+    font-size: 16pt;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .info {
+    margin-bottom: 10px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10.5pt;
+  }
+  th, td {
+    border: 1px solid #000;
+    padding: 6px;
+    text-align: center;
+  }
+  th {
+    font-size: 12pt;
+    font-weight: bold;
+  }
+  .no-border td {
+    border: none;
+    text-align: left;
+    padding: 4px 0;
+  }
+  .footer {
+    margin-top: 20px;
+    text-align: right;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="title">江苏中茂金属科技有限公司</div>
+
+<div class="info">
+  电 话：0512-86162111　　13962313598<br/>
+  邮 箱：gzw@zmwj.cn<br/>
+  网 址：www.zmwj.cn<br/>
+  地 址：江苏·常熟沙家浜镇南新路58号
+</div>
+
+<table class="no-border">
+  <tr>
+    <td>收件公司：</td>
+    <td>收件人：</td>
+  </tr>
+  <tr>
+    <td>电 话：</td>
+    <td>传 真：</td>
+  </tr>
+</table>
+
+<p>您好！贵司所需产品报价如下：</p>
+
+<table>
+  <tr>
+    <th>序号</th>
+    <th>产品名称</th>
+    <th>产品规格</th>
+    <th>单价（元/套）</th>
+    <th>备注</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td></td>
+    <td></td>
+    <td>${g_priceWithTax.toFixed(4)}</td>
+    <td></td>
+  </tr>
+</table>
+
+<p>（1）材质：</p>
+<p>（2）以上价格含税，含运费</p>
+<p>（3）表面处理：</p>
+<p>（4）报价有效期为30天</p>
+<p>（5）交货期限：订单确认后30天内交货</p>
+<p>（6）包装方式：纸箱散装</p>
+<p>（7）付款方式：款到发货</p>
+
+<div class="footer">
+  江苏中茂金属科技有限公司<br/>
+  报价人：龚子文<br/>
+  ${dateStr}
+</div>
+
+</body>
+</html>
+`;
+
+  const blob = new Blob(["\ufeff" + html], {
+    type: "application/msword"
+  });
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "中茂汽标报价单.doc";
+  a.click();
+}
