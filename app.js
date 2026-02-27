@@ -3,6 +3,7 @@ let g_fixedCost = 0;
 let g_costAfterLoss = 0;
 let g_priceNoTax = 0;
 let g_priceWithTax = 0;
+let g_tonPrice = 0;   // ✅ 新增吨价
 
 function getVal(id) {
   return +document.getElementById(id).value || 0;
@@ -10,11 +11,18 @@ function getVal(id) {
 
 function calc() {
   const weightGram = getVal("weight");
+  if (!weightGram) {
+    alert("请填写单重");
+    return;
+  }
+
   const weightKg = weightGram / 1000;
   const materialPrice = getVal("materialPrice");
 
-  const materialCost = weightGram * materialPrice / 1_000_000;
+  // 材料成本
+  const materialCost = weightGram * materialPrice / 1000000;
 
+  // 固定成本
   const fixedCost =
     getVal("process") +
     getVal("mold") +
@@ -25,20 +33,31 @@ function calc() {
     getVal("extra3") +
     getVal("freight");
 
+  // 按kg计费
   const heatCost = getVal("heat") * weightKg;
   const platingCost = getVal("plating") * weightKg;
 
   const baseCost = materialCost + fixedCost + heatCost + platingCost;
 
+  // 含损耗
   const costAfterLoss = baseCost * (1 + getVal("loss") / 100);
+
+  // 未税价
   const priceNoTax = costAfterLoss * (1 + getVal("profit") / 100);
+
+  // 含税价
   const priceWithTax = priceNoTax * (1 + getVal("tax") / 100);
 
+  // ✅ 吨价计算（1吨=1000000g）
+  const tonPrice = (1000000 / weightGram) * priceWithTax;
+
+  // 全局保存
   g_materialCost = materialCost;
   g_fixedCost = fixedCost;
   g_costAfterLoss = costAfterLoss;
   g_priceNoTax = priceNoTax;
   g_priceWithTax = priceWithTax;
+  g_tonPrice = tonPrice;
 
   document.getElementById("result").innerHTML = `
     <p>材料成本：${materialCost.toFixed(4)} 元</p>
@@ -46,26 +65,32 @@ function calc() {
     <p>含损耗成本：${costAfterLoss.toFixed(4)} 元</p>
     <p>销售单价（未税）：${priceNoTax.toFixed(4)} 元</p>
     <p><strong>销售单价（含税）：${priceWithTax.toFixed(4)} 元</strong></p>
+    <p style="color:red;"><strong>吨价（含税）：${tonPrice.toFixed(2)} 元/吨</strong></p>
   `;
 }
 
 function downloadExcel() {
+  if (!g_priceWithTax) {
+    alert("请先计算单价");
+    return;
+  }
+
   const rows = [
     ["项目", "数值"],
     ["料号", code.value],
     ["规格", spec.value],
     ["单重(g)", getVal("weight")],
     ["材料单价(元/吨)", getVal("materialPrice")],
-    ["加工费", getVal("process")],
+    ["加工费（元/个）", getVal("process")],
+    ["组件（元/个）", getVal("components")],
     ["模具费", getVal("mold")],
     ["牙板费", getVal("die")],
-    ["组件", getVal("components")],
-    ["热处理", getVal("heat")],
-    ["镀层", getVal("plating")],
-    ["附加1", getVal("extra1")],
-    ["附加2", getVal("extra2")],
-    ["附加3", getVal("extra3")],
-    ["运费", getVal("freight")],
+    ["热处理（元/kg）", getVal("heat")],
+    ["镀层（元/kg）", getVal("plating")],
+    ["附加1（元/个）", getVal("extra1")],
+    ["附加2（元/个）", getVal("extra2")],
+    ["附加3（元/个）", getVal("extra3")],
+    ["运费（元/个）", getVal("freight")],
     ["损耗率%", getVal("loss")],
     ["利润率%", getVal("profit")],
     ["税率%", getVal("tax")],
@@ -74,7 +99,8 @@ function downloadExcel() {
     ["固定成本合计", g_fixedCost.toFixed(4)],
     ["含损耗成本", g_costAfterLoss.toFixed(4)],
     ["销售单价（未税）", g_priceNoTax.toFixed(4)],
-    ["销售单价（含税）", g_priceWithTax.toFixed(4)]
+    ["销售单价（含税）", g_priceWithTax.toFixed(4)],
+    ["吨价（含税）", g_tonPrice.toFixed(2)]
   ];
 
   const csv = "\uFEFF" + rows.map(r => r.join(",")).join("\n");
@@ -104,108 +130,66 @@ function downloadQuoteDoc() {
 <head>
 <meta charset="UTF-8">
 <style>
-  body {
-    font-family: SimSun;
-    font-size: 10.5pt;
-    line-height: 1.6;
-  }
-  .title {
-    text-align: center;
-    font-size: 16pt;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  .info {
-    margin-bottom: 10px;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 10.5pt;
-  }
-  th, td {
-    border: 1px solid #000;
-    padding: 6px;
-    text-align: center;
-  }
-  th {
-    font-size: 12pt;
-    font-weight: bold;
-  }
-  .no-border td {
-    border: none;
-    text-align: left;
-    padding: 4px 0;
-  }
-  .footer {
-    margin-top: 20px;
-    text-align: right;
-  }
+  body { font-family: SimSun; font-size: 10.5pt; line-height: 1.6; }
+  .title { text-align: center; font-size: 16pt; font-weight: bold; margin-bottom: 10px; }
+  .info { margin-bottom: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 10.5pt; }
+  th, td { border: 1px solid #000; padding: 6px; text-align: center; }
+  th { font-size: 12pt; font-weight: bold; }
+  .no-border td { border: none; text-align: left; padding: 4px 0; }
+  .footer { margin-top: 20px; text-align: right; }
 </style>
 </head>
-
 <body>
 
 <div class="title">江苏中茂金属科技有限公司</div>
 
 <div class="info">
-  电 话：0512-86162111　　13962313598<br/>
+  电 话：0512-86162111　13962313598<br/>
   邮 箱：gzw@zmwj.cn<br/>
   网 址：www.zmwj.cn<br/>
   地 址：江苏·常熟沙家浜镇南新路58号
 </div>
 
-<table class="no-border">
-  <tr>
-    <td>收件公司：</td>
-    <td>收件人：</td>
-  </tr>
-  <tr>
-    <td>电 话：</td>
-    <td>传 真：</td>
-  </tr>
-</table>
-
 <p>您好！贵司所需产品报价如下：</p>
 
 <table>
-  <tr>
-    <th>序号</th>
-    <th>产品名称</th>
-    <th>产品规格</th>
-    <th>单价（元/套）</th>
-    <th>备注</th>
-  </tr>
-  <tr>
-    <td>1</td>
-    <td></td>
-    <td></td>
-    <td>${g_priceWithTax.toFixed(4)}</td>
-    <td></td>
-  </tr>
+<tr>
+<th>序号</th>
+<th>产品名称</th>
+<th>产品规格</th>
+<th>单价（元/套）</th>
+<th>备注</th>
+</tr>
+<tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td>${g_priceWithTax.toFixed(4)}</td>
+<td></td>
+</tr>
 </table>
 
 <p>（1）材质：</p>
 <p>（2）以上价格含税，含运费</p>
 <p>（3）表面处理：</p>
-<p>（4）报价有效期为30天</p>
+<p>（4）报价有效期30天</p>
 <p>（5）交货期限：订单确认后30天内交货</p>
 <p>（6）包装方式：纸箱散装</p>
 <p>（7）付款方式：款到发货</p>
+<p><strong>（8）吨价参考：${g_tonPrice.toFixed(2)} 元/吨</strong></p>
 
 <div class="footer">
-  江苏中茂金属科技有限公司<br/>
-  报价人：龚子文<br/>
-  ${dateStr}
+江苏中茂金属科技有限公司<br/>
+报价人：龚子文<br/>
+${dateStr}
 </div>
 
 </body>
 </html>
 `;
 
-  const blob = new Blob(["\ufeff" + html], {
-    type: "application/msword"
-  });
+  const blob = new Blob(["\ufeff" + html], { type: "application/msword" });
 
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
